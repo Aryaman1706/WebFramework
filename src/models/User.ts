@@ -2,8 +2,9 @@ import { Model } from "./Model";
 import { Attributes } from "./Attributes";
 import { Eventing } from "./Eventing";
 import { Sync } from "./Sync";
+import { Collection } from "./Collection";
 
-interface UserProps {
+export interface UserProps {
   id?: number;
   name?: string;
   age?: number;
@@ -15,6 +16,12 @@ export class User extends Model<UserProps> {
       new Attributes<UserProps>(attrs),
       new Eventing(),
       new Sync<UserProps>("http://localhost:3000/users"),
+    );
+  }
+  static collection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(
+      "http://localhost:3000/users",
+      (json: UserProps) => User.build(json),
     );
   }
 }
